@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Football Coins Store</title>
+    <!-- Telegram Web App Scriptini ulash -->
+    <script src="https://telegram.org"></script>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #0b0e14;
+            color: #ffffff;
+            margin: 0;
+            padding: 15px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .header h1 {
+            font-size: 24px;
+            margin: 5px 0;
+            color: #ffd700;
+            text-shadow: 0 0 10px rgba(255, 215, 0, 0.3);
+        }
+        .header p {
+            color: #8a99ad;
+            font-size: 14px;
+            margin: 0;
+        }
+        /* Tangalar paketi kartochkalari */
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            width: 100%;
+            max-width: 400px;
+            margin-bottom: 25px;
+        }
+        .coin-card {
+            background: linear-gradient(145deg, #141923, #1a2230);
+            border: 1px solid #243242;
+            border-radius: 12px;
+            padding: 15px;
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            transition: transform 0.2s;
+        }
+        .coin-card:active {
+            transform: scale(0.95);
+        }
+        .coin-icon {
+            font-size: 35px;
+            margin-bottom: 8px;
+        }
+        .coin-amount {
+            font-size: 18px;
+            font-weight: bold;
+            color: #ffffff;
+            margin-bottom: 5px;
+        }
+        .coin-price {
+            font-size: 13px;
+            color: #00ff88;
+            background: rgba(0, 255, 136, 0.1);
+            padding: 4px 8px;
+            border-radius: 20px;
+            display: inline-block;
+        }
+        /* Liderlar taxtasi (Leaderboard) */
+        .leaderboard {
+            width: 100%;
+            max-width: 400px;
+            background: #141923;
+            border: 1px solid #243242;
+            border-radius: 12px;
+            padding: 15px;
+            box-sizing: border-box;
+        }
+        .leaderboard h2 {
+            font-size: 18px;
+            margin-top: 0;
+            margin-bottom: 15px;
+            color: #ffd700;
+            border-bottom: 1px solid #243242;
+            padding-bottom: 8px;
+        }
+        .leader-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid #1a2230;
+        }
+        .leader-item:last-child {
+            border-bottom: none;
+        }
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .rank {
+            font-weight: bold;
+            width: 20px;
+            color: #8a99ad;
+        }
+        .rank-1 { color: #ffd700; }
+        .rank-2 { color: #c0c0c0; }
+        .rank-3 { color: #cd7f32; }
+        .username {
+            font-size: 15px;
+        }
+        .user-coins {
+            color: #ffd700;
+            font-weight: bold;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <h1>⚽ Football Coins Store</h1>
+        <p>Tangalar sotib oling va peshqadamlar safiga qo'shiling!</p>
+    </div>
+
+    <!-- Tangalar do'koni qismi -->
+    <div class="grid-container">
+        <div class="coin-card" onclick="buyCoins(100, 20000)">
+            <div class="coin-icon">🪙</div>
+            <div class="coin-amount">100 Coins</div>
+            <div class="coin-price">20 000 so'm</div>
+        </div>
+        <div class="coin-card" onclick="buyCoins(500, 90000)">
+            <div class="coin-icon">💰</div>
+            <div class="coin-amount">500 Coins</div>
+            <div class="coin-price">90 000 so'm</div>
+        </div>
+        <div class="coin-card" onclick="buyCoins(1000, 170000)">
+            <div class="coin-icon">🏆</div>
+            <div class="coin-amount">1 000 Coins</div>
+            <div class="coin-price">170 000 so'm</div>
+        </div>
+        <div class="coin-card" onclick="buyCoins(5000, 750000)">
+            <div class="coin-icon">👑</div>
+            <div class="coin-amount">5 000 Coins</div>
+            <div class="coin-price">750 000 so'm</div>
+        </div>
+    </div>
+
+    <!-- Liderlar taxtasi qismi -->
+    <div class="leaderboard">
+        <h2>🏆 Eng ko'p tangaga ega bo'lganlar</h2>
+        <div id="leaderboard-list">
+            <div class="leader-item">
+                <div class="user-info">
+                    <span class="rank rank-1">1</span>
+                    <span class="username">Asilbek ⚽</span>
+                </div>
+                <span class="user-coins">12,450 🪙</span>
+            </div>
+            <div class="leader-item">
+                <div class="user-info">
+                    <span class="rank rank-2">2</span>
+                    <span class="username">Javohir_FC</span>
+                </div>
+                <span class="user-coins">8,200 🪙</span>
+            </div>
+            <div class="leader-item">
+                <div class="user-info">
+                    <span class="rank rank-3">3</span>
+                    <span class="username">Cristiano_Fan</span>
+                </div>
+                <span class="user-coins">5,100 🪙</span>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Telegram Web App-ni ishga tushirish
+        const tg = window.Telegram.WebApp;
+        tg.expand(); // Oynani to'liq ekranga ochish
+
+        // Tangani bosganda botga ma'lumot yuborish funksiyasi
+        function buyCoins(amount, price) {
+            tg.showConfirm(`Siz chindan ham ${amount} Football Coins sotib olmoqchimisiz?`, function(confirmed) {
+                if (confirmed) {
+                    // Botga xarid ma'lumotlarini jo'natish
+                    const data = {
+                        action: "buy_coins",
+                        coins: amount,
+                        cost: price
+                    };
+                    tg.sendData(JSON.stringify(data));
+                    tg.close(); // Oynani yopish
+                }
+            });
+        }
+    </script>
+</body>
+</html>
