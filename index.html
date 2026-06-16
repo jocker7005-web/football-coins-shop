@@ -7,241 +7,98 @@
     <script src="https://telegram.org"></script>
     <style>
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: Arial, sans-serif;
             background-color: #0b0e14;
             color: #ffffff;
-            margin: 0;
             padding: 15px;
             display: flex;
             flex-direction: column;
             align-items: center;
         }
-        .header {
-            text-align: center;
-            margin-bottom: 15px;
-            width: 100%;
-            max-width: 450px;
-        }
-        .header h1 {
-            font-size: 22px;
-            margin: 5px 0;
-            color: #ffd700;
-        }
-        .warning-box {
-            background: rgba(255, 71, 87, 0.15);
-            border: 1px solid #ff4757;
-            border-radius: 8px;
-            padding: 10px;
-            font-size: 12px;
-            color: #ff6b81;
-            margin-bottom: 20px;
-            text-align: center;
-            line-height: 1.4;
-        }
-        .grid-container {
+        h1 { font-size: 20px; color: #ffd700; margin-bottom: 20px; }
+        .grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
             gap: 12px;
             width: 100%;
-            max-width: 450px;
-            margin-bottom: 25px;
+            max-width: 400px;
         }
-        .coin-card {
-            background: linear-gradient(145deg, #141923, #1a2230);
-            border: 1px solid #243242;
-            border-radius: 12px;
-            padding: 12px;
-            text-align: center;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-            cursor: pointer;
-            -webkit-tap-highlight-color: transparent;
-        }
-        .coin-card:active {
-            transform: scale(0.96);
-        }
-        .coin-icon {
-            font-size: 28px;
-            margin-bottom: 5px;
-        }
-        .coin-amount {
-            font-size: 16px;
-            font-weight: bold;
-            color: #ffffff;
-            margin-bottom: 5px;
-        }
-        .coin-price {
-            font-size: 12px;
-            color: #00ff88;
-            background: rgba(0, 255, 136, 0.1);
-            padding: 3px 8px;
-            border-radius: 20px;
-            display: inline-block;
-        }
-        .form-overlay {
-            display: none;
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.85);
-            justify-content: center;
-            align-items: center;
-            z-index: 1000;
-        }
-        .form-box {
+        .card {
             background: #141923;
             border: 1px solid #243242;
-            padding: 20px;
-            border-radius: 15px;
-            width: 85%;
-            max-width: 350px;
-        }
-        .form-box h3 {
-            margin-top: 0;
-            color: #ffd700;
-            font-size: 16px;
+            border-radius: 10px;
+            padding: 15px;
             text-align: center;
-        }
-        .form-box input {
-            width: 100%;
-            padding: 10px;
-            margin: 8px 0;
-            background: #0b0e14;
-            border: 1px solid #243242;
-            border-radius: 8px;
-            color: white;
-            box-sizing: border-box;
-        }
-        .form-btn {
-            width: 100%;
-            padding: 10px;
-            background: #00ff88;
-            border: none;
-            border-radius: 8px;
-            color: #0b0e14;
-            font-weight: bold;
-            margin-top: 10px;
             cursor: pointer;
         }
-        .close-btn {
-            background: #ff4757;
-            color: white;
-        }
+        .amount { font-size: 16px; font-weight: bold; margin-bottom: 5px; }
+        .price { font-size: 12px; color: #00ff88; }
     </style>
 </head>
 <body>
 
-    <div class="header">
-        <h1>⚽ Android uchun Coins do'koni</h1>
-    </div>
+    <h1>⚽ Android uchun Coins do'koni</h1>
 
-    <div class="warning-box">
-        ⚠️ **Muhim eslatma:** eFootball tizimida oyiga faqat 9 marta transfer limiti bor. Limitingiz kuymasligi uchun tangalarni haftada 1 marta kattaroq paketda sotib olish tavsiya etiladi!
-    </div>
-
-    <div class="grid-container">
-        <div class="coin-card" onclick="openOrderForm(260, 40000)">
-            <div class="coin-icon">🪙</div><div class="coin-amount">260 coins</div><div class="coin-price">40 000 so'm</div>
+    <div class="grid">
+        <div class="card" onclick="sendOrder(260, 40000)">
+            <div class="amount">260 coins</div><div class="price">40 000 so'm</div>
         </div>
-        <div class="coin-card" onclick="openOrderForm(300, 45000)">
-            <div class="coin-icon">🪙</div><div class="coin-amount">300 coins</div><div class="coin-price">45 000 so'm</div>
+        <div class="card" onclick="sendOrder(300, 45000)">
+            <div class="amount">300 coins</div><div class="price">45 000 so'm</div>
         </div>
-        <div class="coin-card" onclick="openOrderForm(390, 60000)">
-            <div class="coin-icon">🪙</div><div class="coin-amount">390 coins</div><div class="coin-price">60 000 so'm</div>
+        <div class="card" onclick="sendOrder(390, 60000)">
+            <div class="amount">390 coins</div><div class="price">60 000 so'm</div>
         </div>
-        <div class="coin-card" onclick="openOrderForm(550, 70000)">
-            <div class="coin-icon">💰</div><div class="coin-amount">550 coins</div><div class="coin-price">70 000 so'm</div>
+        <div class="card" onclick="sendOrder(550, 70000)">
+            <div class="amount">550 coins</div><div class="price">70 000 so'm</div>
         </div>
-        <div class="coin-card" onclick="openOrderForm(750, 95000)">
-            <div class="coin-icon">💰</div><div class="coin-amount">750 coins</div><div class="coin-price">95 000 so'm</div>
+        <div class="card" onclick="sendOrder(750, 95000)">
+            <div class="amount">750 coins</div><div class="price">95 000 so'm</div>
         </div>
-        <div class="coin-card" onclick="openOrderForm(1040, 125000)">
-            <div class="coin-icon">💰</div><div class="coin-amount">1040 coins</div><div class="coin-price">125 000 so'm</div>
+        <div class="card" onclick="sendOrder(1040, 125000)">
+            <div class="amount">1040 coins</div><div class="price">125 000 so'm</div>
         </div>
-        <div class="coin-card" onclick="openOrderForm(1790, 210000)">
-            <div class="coin-icon">🏆</div><div class="coin-amount">1790 coins</div><div class="coin-price">210 000 so'm</div>
+        <div class="card" onclick="sendOrder(1790, 210000)">
+            <div class="amount">1790 coins</div><div class="price">210 000 so'm</div>
         </div>
-        <div class="coin-card" onclick="openOrderForm(2130, 240000)">
-            <div class="coin-icon">🏆</div><div class="coin-amount">2130 coins</div><div class="coin-price">240 000 so'm</div>
+        <div class="card" onclick="sendOrder(2130, 240000)">
+            <div class="amount">2130 coins</div><div class="price">240 000 so'm</div>
         </div>
-        <div class="coin-card" onclick="openOrderForm(2680, 310000)">
-            <div class="coin-icon">🏆</div><div class="coin-amount">2680 coins</div><div class="coin-price">310 000 so'm</div>
+        <div class="card" onclick="sendOrder(2680, 310000)">
+            <div class="amount">2680 coins</div><div class="price">310 000 so'm</div>
         </div>
-        <div class="coin-card" onclick="openOrderForm(3250, 350000)">
-            <div class="coin-icon">👑</div><div class="coin-amount">3250 coins</div><div class="coin-price">350 000 so'm</div>
+        <div class="card" onclick="sendOrder(3250, 350000)">
+            <div class="amount">3250 coins</div><div class="price">350 000 so'm</div>
         </div>
-        <div class="coin-card" onclick="openOrderForm(4000, 440000)">
-            <div class="coin-icon">👑</div><div class="coin-amount">4000 coins</div><div class="coin-price">440 000 so'm</div>
+        <div class="card" onclick="sendOrder(4000, 440000)">
+            <div class="amount">4000 coins</div><div class="price">440 000 so'm</div>
         </div>
-        <div class="coin-card" onclick="openOrderForm(5700, 560000)">
-            <div class="coin-icon">👑</div><div class="coin-amount">5700 coins</div><div class="coin-price">560 000 so'm</div>
+        <div class="card" onclick="sendOrder(5700, 560000)">
+            <div class="amount">5700 coins</div><div class="price">560 000 so'm</div>
         </div>
-        <div class="coin-card" onclick="openOrderForm(7040, 730000)">
-            <div class="coin-icon">👑</div><div class="coin-amount">7040 coins</div><div class="coin-price">730 000 so'm</div>
+        <div class="card" onclick="sendOrder(7040, 730000)">
+            <div class="amount">7040 coins</div><div class="price">730 000 so'm</div>
         </div>
-        <div class="coin-card" onclick="openOrderForm(9990, 1050000)">
-            <div class="coin-icon">👑</div><div class="coin-amount">9990 coins</div><div class="coin-price">1 050 000 so'm</div>
+        <div class="card" onclick="sendOrder(9990, 1050000)">
+            <div class="amount">9990 coins</div><div class="price">1 050 000 so'm</div>
         </div>
-        <div class="coin-card" onclick="openOrderForm(12800, 1190000)">
-            <div class="coin-icon">👑</div><div class="coin-amount">12800 coins</div><div class="coin-price">1 190 000 so'm</div>
-        </div>
-    </div>
-
-    <div id="orderFormOverlay" class="form-overlay">
-        <div class="form-box">
-            <h3 id="formTitle">Konami Ma'lumotlari</h3>
-            <input type="email" id="konamiEmail" placeholder="Konami ID (Email)">
-            <input type="text" id="konamiPassword" placeholder="Konami Parol">
-            <input type="text" id="efootballUid" placeholder="eFootball User ID (UID)">
-            <button class="form-btn" onclick="submitOrder()">To'lovga o'tish</button>
-            <button class="form-btn close-btn" onclick="closeOrderForm()">Yopish</button>
+        <div class="card" onclick="sendOrder(12800, 1190000)">
+            <div class="amount">12800 coins</div><div class="price">1 190 000 so'm</div>
         </div>
     </div>
 
     <script>
         const tg = window.Telegram.WebApp;
-        if (tg) {
-            tg.expand();
-        }
+        tg.expand();
 
-        let selectedCoins = 0;
-        let selectedPrice = 0;
-
-        function openOrderForm(amount, price) {
-            selectedCoins = amount;
-            selectedPrice = price;
-            document.getElementById("formTitle").innerText = `${amount} Coins uchun ma'lumotlar`;
-            document.getElementById("orderFormOverlay").style.display = "flex";
-        }
-
-        function closeOrderForm() {
-            document.getElementById("orderFormOverlay").style.display = "none";
-        }
-
-        function submitOrder() {
-            const email = document.getElementById("konamiEmail").value;
-            const pass = document.getElementById("konamiPassword").value;
-            const uid = document.getElementById("efootballUid").value;
-
-            if(!email || !pass || !uid) {
-                alert("Iltimos, barcha kataklarni to'ldiring!");
-                return;
-            }
-
+        function sendOrder(amount, price) {
             const orderData = {
                 action: "buy_coins",
-                coins: selectedCoins,
-                cost: selectedPrice,
-                konami_email: email,
-                konami_pass: pass,
-                player_uid: uid
+                coins: amount,
+                cost: price
             };
-
-            if (tg && tg.sendData) {
-                tg.sendData(JSON.stringify(orderData));
-                tg.close();
-            } else {
-                alert("Muvaffaqiyatli! Botga ma'lumotlar yuborildi (Brauzer testi): " + JSON.stringify(orderData));
-                closeOrderForm();
-            }
+            tg.sendData(JSON.stringify(orderData));
+            tg.close();
         }
     </script>
 </body>
