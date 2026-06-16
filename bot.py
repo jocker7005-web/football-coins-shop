@@ -13,8 +13,8 @@ TOKEN = "8875686952:AAGUFmIRMfWU2m-lqa9r9RyTeSvsF6Cpl3E"
 ADMIN_GROUP_ID = -5459056432
 WEBAPP_URL = "https://football-coins-shop.vercel.app"
 
-KARTA_RAQAM = "8600 0000 0000 0000"  # O'z kartangizni yozing
-KARTA_E_EGA = "FALONCHI PISTONCHIYEV" # Ismingizni yozing
+KARTA_RAQAM = "9860350144814984"  # O'z kartangizni yozing
+KARTA_E_EGA = "ERGASHEVA RUHSHONA" # Ismingizni yozing
 
 bot = Bot(token=TOKEN)
 dp = Dispatcher()
