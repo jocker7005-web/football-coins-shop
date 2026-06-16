@@ -1,104 +1,141 @@
+
 <!DOCTYPE html>
 <html lang="uz">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Football Coins Store</title>
-    <script src="https://telegram.org"></script>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
         body {
-            font-family: Arial, sans-serif;
-            background-color: #0b0e14;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #0d1117;
             color: #ffffff;
+            margin: 0;
+            padding: 20px;
+            text-align: center;
+        }
+        h1 {
+            color: #ffdf00;
+            font-size: 24px;
+            margin-bottom: 25px;
+        }
+        .container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+        .card {
+            background-color: #161b22;
+            border: 1px solid #30363d;
+            border-radius: 12px;
             padding: 15px;
             display: flex;
             flex-direction: column;
+            justify-content: space-between;
             align-items: center;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
         }
-        h1 { font-size: 20px; color: #ffd700; margin-bottom: 20px; }
-        .grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 12px;
-            width: 100%;
-            max-width: 400px;
+        .coins {
+            font-size: 18px;
+            font-weight: bold;
+            color: #58a6ff;
+            margin-bottom: 5px;
         }
-        .card {
-            background: #141923;
-            border: 1px solid #243242;
-            border-radius: 10px;
-            padding: 15px;
-            text-align: center;
+        .price {
+            font-size: 14px;
+            color: #2ea44f;
+            margin-bottom: 12px;
+        }
+        .btn-buy {
+            background-color: #238636;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            padding: 8px 16px;
+            font-size: 14px;
+            font-weight: 600;
             cursor: pointer;
+            width: 100%;
+            transition: background 0.2s;
         }
-        .amount { font-size: 16px; font-weight: bold; margin-bottom: 5px; }
-        .price { font-size: 12px; color: #00ff88; }
+        .btn-buy:hover {
+            background-color: #2ea44f;
+        }
     </style>
 </head>
 <body>
 
     <h1>⚽ Android uchun Coins do'koni</h1>
 
-    <div class="grid">
-        <div class="card" onclick="sendOrder(260, 40000)">
-            <div class="amount">260 coins</div><div class="price">40 000 so'm</div>
+    <div class="container">
+        <div class="card">
+            <div class="coins">260 coins</div>
+            <div class="price">40 000 so'm</div>
+            <button class="btn-buy" onclick="sendOrder('Android', '260 coins', '40 000')">Sotib olish</button>
         </div>
-        <div class="card" onclick="sendOrder(300, 45000)">
-            <div class="amount">300 coins</div><div class="price">45 000 so'm</div>
+
+        <div class="card">
+            <div class="coins">300 coins</div>
+            <div class="price">45 000 so'm</div>
+            <button class="btn-buy" onclick="sendOrder('Android', '300 coins', '45 000')">Sotib olish</button>
         </div>
-        <div class="card" onclick="sendOrder(390, 60000)">
-            <div class="amount">390 coins</div><div class="price">60 000 so'm</div>
+
+        <div class="card">
+            <div class="coins">390 coins</div>
+            <div class="price">60 000 so'm</div>
+            <button class="btn-buy" onclick="sendOrder('Android', '390 coins', '60 000')">Sotib olish</button>
         </div>
-        <div class="card" onclick="sendOrder(550, 70000)">
-            <div class="amount">550 coins</div><div class="price">70 000 so'm</div>
+
+        <div class="card">
+            <div class="coins">550 coins</div>
+            <div class="price">70 000 so'm</div>
+            <button class="btn-buy" onclick="sendOrder('Android', '550 coins', '70 000')">Sotib olish</button>
         </div>
-        <div class="card" onclick="sendOrder(750, 95000)">
-            <div class="amount">750 coins</div><div class="price">95 000 so'm</div>
+
+        <div class="card">
+            <div class="coins">750 coins</div>
+            <div class="price">95 000 so'm</div>
+            <button class="btn-buy" onclick="sendOrder('Android', '750 coins', '95 000')">Sotib olish</button>
         </div>
-        <div class="card" onclick="sendOrder(1040, 125000)">
-            <div class="amount">1040 coins</div><div class="price">125 000 so'm</div>
+
+        <div class="card">
+            <div class="coins">1040 coins</div>
+            <div class="price">125 000 so'm</div>
+            <button class="btn-buy" onclick="sendOrder('Android', '1040 coins', '125 000')">Sotib olish</button>
         </div>
-        <div class="card" onclick="sendOrder(1790, 210000)">
-            <div class="amount">1790 coins</div><div class="price">210 000 so'm</div>
+
+        <div class="card">
+            <div class="coins">1790 coins</div>
+            <div class="price">210 000 so'm</div>
+            <button class="btn-buy" onclick="sendOrder('Android', '1790 coins', '210 000')">Sotib olish</button>
         </div>
-        <div class="card" onclick="sendOrder(2130, 240000)">
-            <div class="amount">2130 coins</div><div class="price">240 000 so'm</div>
-        </div>
-        <div class="card" onclick="sendOrder(2680, 310000)">
-            <div class="amount">2680 coins</div><div class="price">310 000 so'm</div>
-        </div>
-        <div class="card" onclick="sendOrder(3250, 350000)">
-            <div class="amount">3250 coins</div><div class="price">350 000 so'm</div>
-        </div>
-        <div class="card" onclick="sendOrder(4000, 440000)">
-            <div class="amount">4000 coins</div><div class="price">440 000 so'm</div>
-        </div>
-        <div class="card" onclick="sendOrder(5700, 560000)">
-            <div class="amount">5700 coins</div><div class="price">560 000 so'm</div>
-        </div>
-        <div class="card" onclick="sendOrder(7040, 730000)">
-            <div class="amount">7040 coins</div><div class="price">730 000 so'm</div>
-        </div>
-        <div class="card" onclick="sendOrder(9990, 1050000)">
-            <div class="amount">9990 coins</div><div class="price">1 050 000 so'm</div>
-        </div>
-        <div class="card" onclick="sendOrder(12800, 1190000)">
-            <div class="amount">12800 coins</div><div class="price">1 190 000 so'm</div>
+
+        <div class="card">
+            <div class="coins">2130 coins</div>
+            <div class="price">240 000 so'm</div>
+            <button class="btn-buy" onclick="sendOrder('Android', '2130 coins', '240 000')">Sotib olish</button>
         </div>
     </div>
 
     <script>
+        // Telegram WebApp dasturini ishga tushirish
         const tg = window.Telegram.WebApp;
-        tg.expand();
+        tg.ready();
+        tg.expand(); // Oynani to'liq ekranda ochish
 
-        function sendOrder(amount, price) {
+        function sendOrder(platform, item, price) {
+            // Botga yuboriladigan ma'lumotlar to'plami
             const orderData = {
-                action: "buy_coins",
-                coins: amount,
-                cost: price
+                platform: platform,
+                item: item,
+                price: price
             };
+            
+            // Ma'lumotni botga uzatish va WebApp oynasini yopish
             tg.sendData(JSON.stringify(orderData));
-            tg.close();
         }
     </script>
 </body>
