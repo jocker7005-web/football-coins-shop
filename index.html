@@ -4,21 +4,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Football Coins Store</title>
+    <title>eFootball Coins Do'koni</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background-color: #0d1117;
             color: #ffffff;
-            margin: 0;
-            padding: 20px;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             text-align: center;
+            padding: 20px;
+            margin: 0;
         }
         h1 {
-            color: #ffdf00;
+            color: #ffcc00;
             font-size: 24px;
-            margin-bottom: 25px;
+            margin-bottom: 20px;
         }
         .container {
             display: grid;
@@ -30,112 +30,84 @@
         .card {
             background-color: #161b22;
             border: 1px solid #30363d;
-            border-radius: 12px;
+            border-radius: 10px;
             padding: 15px;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            align-items: center;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+            cursor: pointer;
+            transition: transform 0.2s, border-color 0.2s;
+        }
+        .card:hover {
+            transform: scale(1.03);
+            border-color: #ffcc00;
         }
         .coins {
             font-size: 18px;
             font-weight: bold;
-            color: #58a6ff;
+            display: block;
             margin-bottom: 5px;
         }
         .price {
+            color: #2ea043;
             font-size: 14px;
-            color: #2ea44f;
-            margin-bottom: 12px;
-        }
-        .btn-buy {
-            background-color: #238636;
-            color: white;
-            border: none;
-            border-radius: 6px;
-            padding: 8px 16px;
-            font-size: 14px;
-            font-weight: 600;
-            cursor: pointer;
-            width: 100%;
-            transition: background 0.2s;
-        }
-        .btn-buy:hover {
-            background-color: #2ea44f;
+            font-weight: bold;
         }
     </style>
 </head>
 <body>
 
-    <h1>⚽ Android uchun Coins do'koni</h1>
-
+    <h1>⚽️ eFootball Coins Do'koni</h1>
+    
     <div class="container">
-        <div class="card">
-            <div class="coins">260 coins</div>
-            <div class="price">40 000 so'm</div>
-            <button class="btn-buy" onclick="sendOrder('Android', '260 coins', '40 000')">Sotib olish</button>
+        <div class="card" onclick="buyItem('260 coins', '40 000')">
+            <span class="coins">260 coins</span>
+            <span class="price">40 000 so'm</span>
         </div>
-
-        <div class="card">
-            <div class="coins">300 coins</div>
-            <div class="price">45 000 so'm</div>
-            <button class="btn-buy" onclick="sendOrder('Android', '300 coins', '45 000')">Sotib olish</button>
+        <div class="card" onclick="buyItem('300 coins', '45 000')">
+            <span class="coins">300 coins</span>
+            <span class="price">45 000 so'm</span>
         </div>
-
-        <div class="card">
-            <div class="coins">390 coins</div>
-            <div class="price">60 000 so'm</div>
-            <button class="btn-buy" onclick="sendOrder('Android', '390 coins', '60 000')">Sotib olish</button>
+        <div class="card" onclick="buyItem('390 coins', '60 000')">
+            <span class="coins">390 coins</span>
+            <span class="price">60 000 so'm</span>
         </div>
-
-        <div class="card">
-            <div class="coins">550 coins</div>
-            <div class="price">70 000 so'm</div>
-            <button class="btn-buy" onclick="sendOrder('Android', '550 coins', '70 000')">Sotib olish</button>
+        <div class="card" onclick="buyItem('550 coins', '70 000')">
+            <span class="coins">550 coins</span>
+            <span class="price">70 000 so'm</span>
         </div>
-
-        <div class="card">
-            <div class="coins">750 coins</div>
-            <div class="price">95 000 so'm</div>
-            <button class="btn-buy" onclick="sendOrder('Android', '750 coins', '95 000')">Sotib olish</button>
+        <div class="card" onclick="buyItem('750 coins', '95 000')">
+            <span class="coins">750 coins</span>
+            <span class="price">95 000 so'm</span>
         </div>
-
-        <div class="card">
-            <div class="coins">1040 coins</div>
-            <div class="price">125 000 so'm</div>
-            <button class="btn-buy" onclick="sendOrder('Android', '1040 coins', '125 000')">Sotib olish</button>
+        <div class="card" onclick="buyItem('1040 coins', '125 000')">
+            <span class="coins">1040 coins</span>
+            <span class="price">125 000 so'm</span>
         </div>
-
-        <div class="card">
-            <div class="coins">1790 coins</div>
-            <div class="price">210 000 so'm</div>
-            <button class="btn-buy" onclick="sendOrder('Android', '1790 coins', '210 000')">Sotib olish</button>
+        <div class="card" onclick="buyItem('1790 coins', '210 000')">
+            <span class="coins">1790 coins</span>
+            <span class="price">210 000 so'm</span>
         </div>
-
-        <div class="card">
-            <div class="coins">2130 coins</div>
-            <div class="price">240 000 so'm</div>
-            <button class="btn-buy" onclick="sendOrder('Android', '2130 coins', '240 000')">Sotib olish</button>
+        <div class="card" onclick="buyItem('2130 coins', '240 000')">
+            <span class="coins">2130 coins</span>
+            <span class="price">240 000 so'm</span>
         </div>
     </div>
 
     <script>
-        // Telegram WebApp dasturini ishga tushirish
+        // Telegram Web App ob'ektini ishga tushiramiz
         const tg = window.Telegram.WebApp;
-        tg.ready();
-        tg.expand(); // Oynani to'liq ekranda ochish
+        tg.ready(); // Telegramga tayyorligimizni bildiramiz
 
-        function sendOrder(platform, item, price) {
-            // Botga yuboriladigan ma'lumotlar to'plami
-            const orderData = {
-                platform: platform,
+        function buyItem(item, price) {
+            // Botga yuboriladigan ma'lumotlar tuzilmasi
+            const data = {
                 item: item,
                 price: price
             };
             
-            // Ma'lumotni botga uzatish va WebApp oynasini yopish
-            tg.sendData(JSON.stringify(orderData));
+            // Ma'lumotni matn (string) ko'rinishida botga uzatamiz
+            tg.sendData(JSON.stringify(data));
+            
+            // Oynani avtomat yopamiz
+            tg.close();
         }
     </script>
 </body>
