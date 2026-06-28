@@ -791,8 +791,30 @@ async def cmd_admin_panel(message: types.Message):
         )
 
 # --- BOTNI ISHGA TUSHIRISH ---
-async def main():
-    await dp.start_polling(bot)
+from aiogram.webhook.aiohttp_handler import SimpleRequestHandler, TokenBasedArgumentMiddleware
+from aiohttp import web
+
+# --- VERCEL WEBHOOK UCHUN ENTRIPOINT ---
+async def handle_webhook(request):
+    # Telegramdan kelgan so'rovni Webhook orqali qabul qilish
+    dispatcher = dp
+    bot_instance = bot
+    
+    # Aiogram webhook handlerini ishga tushirish
+    handler = SimpleRequestHandler(dispatcher=dispatcher, bot=bot_instance)
+    return await handler.handle(request)
+
+# Vercel Serverless Function uchun app yaratish
+app = web.Application()
+app.router.add_post("/", handle_webhook)
+
+# Webhookni birinchi marta bot ishga tushganda o'rnatish
+async def on_startup():
+    webhook_url = f"https://vercel.app"
+    await bot.set_webhook(url=webhook_url)
 
 if __name__ == "__main__":
-    asyncio.run(main())
+    # Maxsus start funksiyasini yuklash
+    asyncio.run(on_startup())
+    web.run_app(app, port=int(os.environ.get("PORT", 8080)))
+
