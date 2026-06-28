@@ -1,78 +1,348 @@
-
 <!DOCTYPE html>
 <html lang="uz">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Football Coins Shop</title>
-    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Football Auction Mini App</title>
+    <!-- Telegram WebApp Rasmiy JavaScript kutubxonasi -->
+    <script src="https://telegram.org"></script>
+    
     <style>
+        /* --- ASOSIY DIZAYN VA RANGLAR PALITRASI (ORANGE SYSTEM) --- */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            -webkit-user-select: none;
+            user-select: none;
+        }
+
         body {
-            background-color: #111;
-            color: #fff;
-            font-family: sans-serif;
-            text-align: center;
-            padding: 20px;
+            background-color: #f8f9fa; /* Skrinshotdagi kabi och, toza fon */
+            color: #212529;
+            overflow-x: hidden;
+            padding-bottom: 80px; /* Pastki menyu uchun joy */
         }
-        h2 { color: #f0a; }
-        .container {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 15px;
-            max-width: 400px;
-            margin: 0 auto;
+
+        /* Sahifalar boshqariruvi */
+        .page {
+            display: none;
+            padding: 16px;
+            animation: fadeIn 0.3s ease-in-out;
         }
-        .btn {
-            background-color: #222;
-            border: 2px solid #333;
-            color: white;
-            padding: 20px 10px;
-            border-radius: 10px;
-            font-size: 16px;
-            cursor: pointer;
-            transition: 0.3s;
-        }
-        .btn:hover {
-            border-color: #f0a;
-            background-color: #1a1a1a;
-        }
-        .price {
+
+        .page.active {
             display: block;
-            color: #4caf50;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* --- SIZ TANLAGAN ORANJ RANGIDAGI PREMIUM ELEMENTLAR --- */
+        .btn-orange {
+            background-color: #ff6600; /* Yorqin Oranj */
+            color: #ffffff;
+            border: none;
+            border-radius: 20px; /* Huddi rasmdagidek yumaloq burchak */
+            padding: 8px 20px;
+            font-size: 14px;
             font-weight: bold;
-            margin-top: 5px;
+            cursor: pointer;
+            transition: background 0.2s, transform 0.1s;
+            box-shadow: 0 4px 10px rgba(255, 102, 0, 0.2);
+        }
+
+        .btn-orange:active {
+            background-color: #e65c00; /* Bosilganda to'qroq oranj */
+            transform: scale(0.97);
+        }
+
+        /* Katta keng tugmalar */
+        .btn-block {
+            width: 100%;
+            padding: 14px;
+            border-radius: 12px;
+            font-size: 16px;
+            margin-top: 12px;
+        }
+
+        /* --- CHIROYLI BLOKLAR VA KARTALAR (WHITE BLOCKS) --- */
+        .card {
+            background: #ffffff;
+            border-radius: 16px;
+            padding: 16px;
+            margin-bottom: 16px;
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04); /* Yengil soya */
+            border: 1px solid #eaeaea;
+        }
+
+        /* Matn kiritish oynalari */
+        .input-field {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ced4da;
+            border-radius: 10px;
+            margin-top: 8px;
+            font-size: 15px;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        .input-field:focus {
+            border-color: #ff6600; /* Oyna bosilganda oranj rangli chizma cheti */
         }
     </style>
 </head>
 <body>
-
-    <h2>⚽️ eFootball Coins Shop 🪙</h2>
-    <p>Sotib olmoqchi bo'lgan tanga miqdorini tanlang:</p>
-
-    <div class="container">
-        <button class="btn" onclick="sendCoins('1000 Coins', '15000')">🪙 1,000<span class="price">15,000 so'm</span></button>
-        <button class="btn" onclick="sendCoins('2000 Coins', '28000')">🪙 2,000<span class="price">28,000 so'm</span></button>
-        <button class="btn" onclick="sendCoins('3000 Coins', '40000')">🪙 3,000<span class="price">40,000 so'm</span></button>
-        <button class="btn" onclick="sendCoins('5000 Coins', '65000')">🪙 5,000<span class="price">65,000 so'm</span></button>
-        <button class="btn" onclick="sendCoins('10000 Coins', '120000')">🪙 10,000<span class="price">120,000 so'm</span></button>
-        <button class="btn" onclick="sendCoins('20000 Coins', '230000')">🪙 20,000<span class="price">230,000 so'm</span></button>
+    <!-- --- REPLIK PROFIL VA ORANJ BALANS PANELI (TOP HEADER) --- -->
+    <div style="background: #ffffff; padding: 16px; border-bottom: 1px solid #eaeaea; display: flex; justify-content: space-between; align-items: center;">
+        <div>
+            <div id="user-name" style="font-weight: bold; font-size: 16px;">Mijoz</div>
+            <div style="font-size: 13px; color: #6c757d; margin-top: 2px;">
+                Balans: <span id="user-balance" style="color: #ff6600; font-weight: bold;">0 UZS</span>
+            </div>
+        </div>
+        <!-- Skrinshotdagi kabi Oranj rangdagi to'ldirish tugmasi -->
+        <button class="btn-orange" onclick="switchPage('wallet')">To'ldirish ></button>
     </div>
 
-    <script>
-        // Telegram WebApp interfeysini faollashtirish
-        const tg = window.Telegram.WebApp;
-        tg.ready();
-        tg.expand(); // Oynani birdaniga katta ochish
+    <!-- --- HARAKATLANUVCHI BANNERLAR (SLIDER SECTION) --- -->
+    <div style="padding: 16px 16px 0 16px; overflow-hidden: hidden;">
+        <div style="background: linear-gradient(135deg, #ff6600, #ff9933); border-radius: 16px; padding: 20px; color: #ffffff; position: relative; box-shadow: 0 4px 15px rgba(255, 102, 0, 0.2);">
+            <div style="font-size: 18px; font-weight: bold;">Futbol Auksioni</div>
+            <div style="font-size: 13px; margin-top: 6px; opacity: 0.9; max-width: 70%;">O'z jamoangizni yig'ing va UZS so'mida savdo qiling!</div>
+            <div style="font-size: 11px; margin-top: 12px; background: rgba(255,255,255,0.2); padding: 4px 8px; border-radius: 10px; display: inline-block;">
+                🔥 Adsgram: Har bir video +500 UZS
+            </div>
+            <!-- Chiroyli vizual to'p ramzi orqa fonda -->
+            <div style="position: absolute; right: 15px; bottom: 10px; font-size: 55px; opacity: 0.15;">⚽</div>
+        </div>
+    </div>
 
-        function sendCoins(name, price) {
-            const orderData = {
-                item: name,
-                price: price
-            };
-            // Ma'lumotni botga yuborish
-            tg.sendData(JSON.stringify(orderData));
-            // Oynani yopish
-            tg.close();
+    <!-- --- SAHIFALARNING ASOSIY KONTEYNERI --- -->
+    <div id="pages-container">
+        
+        <!-- 🏟 Sahifa 1: Mening Klubim -->
+        <div id="page-club" class="page active">
+            <div class="card" style="text-align: center; background: linear-gradient(to bottom, #ffffff, #f1f3f5);">
+                <div style="font-size: 35px; margin-bottom: 8px;">🏟</div>
+                <h3 style="font-size: 16px;">Sizning Jamoangiz</h3>
+                <div style="margin-top: 10px; display: flex; justify-content: space-around;">
+                    <div>
+                        <div style="font-size: 12px; color: #6c757d;">Jamoa Kuchi</div>
+                        <div id="club-power" style="font-size: 18px; font-weight: bold; color: #ff6600; margin-top: 2px;">90 / 100</div>
+                    </div>
+                    <div>
+                        <div style="font-size: 12px; color: #6c757d;">Futbolchilar</div>
+                        <div id="club-players-count" style="font-size: 18px; font-weight: bold; margin-top: 2px;">3 ta</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div style="font-weight: bold; font-size: 15px; margin-bottom: 12px; padding-left: 4px; border-left: 4px solid #ff6600;">🏃‍♂️ Jamoa Tarkibi</div>
+            <div id="my-players-list">
+                <!-- Futbolchi kartalari JavaScript orqali shu yerga chiroyli teriladi -->
+            </div>
+        </div>
+        <!-- ⚒ Sahifa 2: Auksion Bozori -->
+        <div id="page-auction" class="page">
+            <div style="font-weight: bold; font-size: 15px; margin-bottom: 12px; padding-left: 4px; border-left: 4px solid #ff6600;">⚒ Faol Auksionlar</div>
+            <div id="auction-list">
+                <!-- Auksion e'lonlari shu yerda jonli taymer bilan ko'rinadi -->
+                <div class="card" style="display: flex; justify-content: space-between; align-items: center;">
+                    <div>
+                        <div style="font-weight: bold; font-size: 15px;">🐢 K. Mbappe</div>
+                        <div style="font-size: 12px; color: #6c757d; margin-top: 2px;">Reyting: 92 | Oltin 🟡</div>
+                        <div style="font-size: 13px; font-weight: bold; color: #ff6600; margin-top: 4px;">💵 Narx: 25,000 UZS</div>
+                    </div>
+                    <button class="btn-orange" onclick="placeBidSimulation()">Stavka +5k</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 💰 Sahifa 3: Mening Hamyonim -->
+        <div id="page-wallet" class="page">
+            <!-- Balans ma'lumotlari -->
+            <div class="card" style="background: linear-gradient(135deg, #212529, #343a40); color: #ffffff; border: none;">
+                <div style="font-size: 13px; opacity: 0.8;">Mening Sof Balansim</div>
+                <div id="wallet-balance" style="font-size: 24px; font-weight: bold; margin-top: 4px; color: #ff6600;">0 UZS</div>
+                <div style="margin-top: 12px; font-size: 12px; opacity: 0.7; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 8px;">
+                    🔒 Muzlatilgan (Auksionda): <span id="wallet-frozen">0 UZS</span>
+                </div>
+            </div>
+
+            <!-- 📥 Pul kiritish bloki -->
+            <div class="card">
+                <h4 style="font-size: 14px; color: #ff6600;">💳 Balansni to'ldirish</h4>
+                <div style="font-size: 12px; color: #6c757d; margin-top: 4px;">Minimal kiritish: 15,000 UZS | Komissiya: 0%</div>
+                <input type="number" id="deposit-amount" class="input-field" placeholder="Summani kiriting (Masalan: 50000)">
+                <button class="btn-orange btn-block" onclick="startDepositFlow()">To'ldirish oynasini ochish</button>
+                
+                <!-- Yashirin to'lov tafsilotlari oynasi -->
+                <div id="deposit-details" style="display: none; margin-top: 16px; padding-top: 16px; border-top: 1px solid #eaeaea;">
+                    <div style="font-size: 13px; background: #f1f3f5; padding: 12px; border-radius: 8px; margin-bottom: 12px;">
+                        📌 <b>To'lov ma'lumotlari:</b><br>
+                        💳 Karta: <code style="font-weight: bold; color: #ff6600;">9860 3501 0897 5409</code> (Xusanova M)<br>
+                        💵 To'lov summasi: <span id="deposit-final-sum" style="font-weight: bold;">0 UZS</span>
+                    </div>
+                    <label style="font-size: 13px; font-weight: bold; display: block; margin-bottom: 6px;">📸 Chek skrinshotini yuklang:</label>
+                    <input type="file" id="receipt-file" style="font-size: 13px;">
+                    <button class="btn-orange btn-block" style="background-color: #28a745; box-shadow: none; margin-top: 12px;" onclick="submitDepositReceipt()">Chekni adminga yuborish</button>
+                </div>
+            </div>
+
+            <!-- 📤 Pul yechish bloki -->
+            <div class="card">
+                <h4 style="font-size: 14px; color: #343a40;">💸 Pulni yechib olish</h4>
+                <div style="font-size: 12px; color: #6c757d; margin-top: 4px;">Minimal yechish: 10,000 UZS | Komissiya: 3%</div>
+                <input type="number" id="withdraw-amount" class="input-field" placeholder="Yechish summasi (UZS)">
+                <input type="text" id="withdraw-card" class="input-field" placeholder="Karta raqamingiz (8600...) " style="margin-top: 8px;">
+                <button class="btn-orange btn-block" style="background-color: #343a40; box-shadow: none;" onclick="submitWithdrawFlow()">Yechish so'rovini yuborish</button>
+            </div>
+        </div>
+        <!-- 🎁 Sahifa 4: Bonus va Adsgram -->
+        <div id="page-bonus" class="page">
+            <div style="font-weight: bold; font-size: 15px; margin-bottom: 12px; padding-left: 4px; border-left: 4px solid #ff6600;">🎁 Bepul Bonuslar</div>
+            <div class="card" style="text-align: center; padding: 24px;">
+                <div style="font-size: 45px; margin-bottom: 12px;">📺</div>
+                <h4 style="font-size: 16px;">Sponsorlik Videolarni Tomosha Qiling</h4>
+                <p style="font-size: 13px; color: #6c757d; margin-top: 6px; line-height: 1.4;">
+                    Har bir to'liq ko'rilgan 15 soniyalik video reklama uchun balansingizga darhol <b>+500 UZS</b> qo'shiladi yoki tasodifiy Oltin futbolchi paketi beriladi!
+                </p>
+                <!-- Yorqin animatsiyali va aylanma soyali Oranj tugma -->
+                <button class="btn-orange btn-block" style="margin-top: 20px; font-size: 15px; padding: 14px;" onclick="watchAdsgramSimulation()">
+                    📺 Video ko'rish va +500 UZS olish
+                </button>
+            </div>
+        </div>
+
+    </div> <!-- Konteyner tugashi -->
+
+    <!-- --- DOIMIYa NAVIGATSIYa PANELI (FOOTER MENU) --- -->
+    <div style="position: fixed; bottom: 0; left: 0; width: 100%; background: #ffffff; border-top: 1px solid #eaeaea; display: flex; justify-content: space-around; padding: 10px 0; box-shadow: 0 -4px 12px rgba(0,0,0,0.03); z-index: 1000;">
+        <div onclick="switchPage('club')" style="text-align: center; cursor: pointer; width: 25%;">
+            <div style="font-size: 20px; color: #ff6600;">🏟</div>
+            <div style="font-size: 11px; color: #212529; font-weight: bold; margin-top: 2px;">Klub</div>
+        </div>
+        <div onclick="switchPage('auction')" style="text-align: center; cursor: pointer; width: 25%;">
+            <div style="font-size: 20px; color: #6c757d;" id="nav-auc-icon">⚒</div>
+            <div style="font-size: 11px; color: #6c757d; margin-top: 2px;" id="nav-auc-text">Auksion</div>
+        </div>
+        <div onclick="switchPage('wallet')" style="text-align: center; cursor: pointer; width: 25%;">
+            <div style="font-size: 20px; color: #6c757d;" id="nav-wallet-icon">💰</div>
+            <div style="font-size: 11px; color: #6c757d; margin-top: 2px;" id="nav-wallet-text">Hamyon</div>
+        </div>
+        <div onclick="switchPage('bonus')" style="text-align: center; cursor: pointer; width: 25%;">
+            <div style="font-size: 20px; color: #6c757d;" id="nav-bonus-icon">🎁</div>
+            <div style="font-size: 11px; color: #6c757d; margin-top: 2px;" id="nav-bonus-text">Bonus</div>
+        </div>
+    </div>
+
+    <!-- --- MINI APP LOGIKASI VA JAVASCRIPT KODLARI --- -->
+    <script>
+        // Telegram WebApp interfeysini ishga tushirish
+        const tg = window.Telegram.WebApp;
+        tg.expand(); // Oynani to'liq ekranga ochish
+
+        // Foydalanuvchi ma'lumotlarini Telegramdan olish
+        if (tg.initDataUnsafe && tg.initDataUnsafe.user) {
+            const user = tg.initDataUnsafe.user;
+            document.getElementById('user-name').innerText = user.first_name + (user.last_name ? ' ' + user.last_name : '');
+        }
+
+        // Sahifalar o'rtasida o'tish va pastki menyu ranglarini Oranj qilish
+        function switchPage(pageId) {
+            // Hamma sahifalarni yopish
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            // Kerakli sahifani ochish
+            document.getElementById('page-' + pageId).classList.add('active');
+
+            // Pastki menyu ranglarini tozalash (kulrang qilish)
+            const menuItems = ['club', 'auction', 'wallet', 'bonus'];
+            menuItems.forEach(item => {
+                if (item !== 'club') {
+                    document.getElementById('nav-' + item + '-icon').style.color = '#6c757d';
+                    document.getElementById('nav-' + item + '-text').style.color = '#6c757d';
+                    document.getElementById('nav-' + item + '-text').style.fontWeight = 'normal';
+                }
+            });
+
+            // Faol sahifa tugmasini yorqin Oranj rangga o'tkazish
+            if (pageId !== 'club') {
+                document.getElementById('nav-' + pageId + '-icon').style.color = '#ff6600';
+                document.getElementById('nav-' + pageId + '-text').style.color = '#212529';
+                document.getElementById('nav-' + pageId + '-text').style.fontWeight = 'bold';
+            }
+        }
+
+        // --- PUL KIRITISH (DEPOSIT) INTEGRATSIYASI ---
+        function startDepositFlow() {
+            const amountInput = document.getElementById('deposit-amount').value;
+            if (!amountInput || isNaN(amountInput)) {
+                alert('⚠️ Iltimos, summa maydoniga faqat raqam kiriting!');
+                return;
+            }
+            const amount = parseInt(amountInput);
+            if (amount < 15000) {
+                alert('⚠️ Minimal balans to\'ldirish miqdori 15,000 UZS!');
+                return;
+            }
+
+            // To'lov tafsilotlari oynasini Oranj effekt bilan ochish
+            document.getElementById('deposit-final-sum').innerText = amount.toLocaleString() + ' UZS';
+            document.getElementById('deposit-details').style.display = 'block';
+        }
+
+        function submitDepositReceipt() {
+            const fileInput = document.getElementById('receipt-file');
+            if (fileInput.files.length === 0) {
+                alert('⚠️ Iltimos, birinchi navbatda to\'lov cheki rasmini yuklang!');
+                return;
+            }
+            alert('✅ Arizangiz muvaffaqiyatli qabul qilindi va tekshirish uchun adminga yuborildi!');
+            // Oynani tozalash va yopish
+            document.getElementById('deposit-amount').value = '';
+            document.getElementById('deposit-details').style.display = 'none';
+            fileInput.value = '';
+        }
+
+        // --- PUL YECHISH (WITHDRAW) INTEGRATSIYASI ---
+        function submitWithdrawFlow() {
+            const amountInput = document.getElementById('withdraw-amount').value;
+            const cardInput = document.getElementById('withdraw-card').value;
+
+            if (!amountInput || !cardInput) {
+                alert('⚠️ Iltimos, barcha maydonlarni to\'ldiring!');
+                return;
+            }
+            const amount = parseInt(amountInput);
+            if (amount < 10000) {
+                alert('⚠️ Minimal pul yechish miqdori 10,000 UZS!');
+                return;
+            }
+
+            const tax = Math.floor(amount * 0.03);
+            const finalGet = amount - tax;
+
+            alert('✅ Pul yechish so\'rovi yuborildi!\nMuzlatilgan summa: ' + amount.toLocaleString() + ' UZS\nKartangizga tushadigan sof pul (3% komissiya bilan): ' + finalGet.toLocaleString() + ' UZS');
+            
+            document.getElementById('withdraw-amount').value = '';
+            document.getElementById('withdraw-card').value = '';
+        }
+
+        // --- ADSGRAM SPONSOR VIDEO SIMULYATSIYASI ---
+        function watchAdsgramSimulation() {
+            alert('📺 Adsgram Sponsorlik videosi yuklanmoqda... (15 soniya)');
+            setTimeout(() => {
+                alert('🎉 Tabriklaymiz! Video muvaffaqiyatli yakunlandi, balansingizga +500 UZS qo\'shildi!');
+            }, 1500);
+        }
+
+        function placeBidSimulation() {
+            alert('📈 Auksionda muvaffaqiyatli +5,000 UZS yuqori stavka qo\'ydingiz! Pullaringiz vaqtincha muzlatildi.');
         }
     </script>
 </body>
